@@ -9,6 +9,6 @@ const {
 
 router.get('/', celebrate(movieIdValidation), getMoviesSavedByUser);
 router.post('/', celebrate(createMovieValidation), createMovie);
-router.delete('/:idMovies', celebrate(movieIdValidation), deleteSavedMovie);
+router.delete('/:movieId', celebrate(movieIdValidation), deleteSavedMovie);
 // нужен ли router.patch?
 module.exports = router;

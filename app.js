@@ -3,26 +3,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const { limiter } = require('./utils/limiterConfig');
 const handlerErrors = require('./middlewares/errors');
-const router = require('./routes/routes');
+const router = require('./routes/index');
 const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests, please try again later.',
-  statusCode: 429,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
 async function connected() {
   try {

@@ -12,7 +12,7 @@ const createMovieValidation = {
     trailerLink: Joi.string().required(),
     thumbnail: Joi.string().required(),
     owner: Joi.string().required(),
-    movieId: Joi.number().required(),
+    movieId: Joi.string().required().length(24).hex(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -20,7 +20,7 @@ const createMovieValidation = {
 
 const movieIdValidation = {
   params: Joi.object().keys({
-    idMovie: Joi.string().length(24).hex(),
+    movieId: Joi.string().length(24).hex(),
   }),
 };
 

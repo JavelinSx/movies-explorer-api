@@ -50,7 +50,7 @@ module.exports.register = (req, res, next) => {
     });
 };
 
-module.exports.getUserInfo = (res, req, next) => {
+module.exports.getUserInfo = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail(new NotFoundError(`Пользователь с id ${userId} не найден`))
@@ -58,7 +58,7 @@ module.exports.getUserInfo = (res, req, next) => {
     .catch(next);
 };
 
-module.exports.updateUserInfo = (res, req, next) => {
+module.exports.updateUserInfo = (req, res, next) => {
   const { email, name } = req.body;
   User.findByIdAndUpdate(
     req.user._id,

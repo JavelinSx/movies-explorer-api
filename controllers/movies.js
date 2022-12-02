@@ -1,6 +1,7 @@
 const Movie = require('../models/movie');
 const BadRequestError = require('../errors/bad_request');
 const NotFoundError = require('../errors/not_found_error');
+const ForbiddenError = require('../errors/forbidden_error');
 
 module.exports.createMovie = (req, res, next) => {
   const {
@@ -54,15 +55,15 @@ module.exports.getMoviesSavedByUser = (req, res, next) => {
 };
 
 module.exports.deleteSavedMovie = (req, res, next) => {
-  const { id } = req.params;
-  Movie.findById(id)
+  const { movieId } = req.params;
+  Movie.findOne({ movieId })
     .orFail(new NotFoundError('Фильм не найден'))
-    // eslint-disable-next-line consistent-return
     .then((movie) => {
-      if (movie.owner === req.user._id) {
-        return movie.remove()
+      if (JSON.stringify(movie.owner) === JSON.stringify(req.user._id)) {
+        return Movie.findByIdAndRemove(movieId)
           .then(() => res.send(movie));
       }
+      return next(new ForbiddenError('Невозможно удалить фильм'));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
