@@ -8,6 +8,7 @@ const BadRequestError = require('../errors/bad_request');
 const NotFoundError = require('../errors/not_found_error');
 const BadAuthError = require('../errors/bad_auth');
 const ExistEmailError = require('../errors/exist_email_error');
+const { ERRORS_MESSAGE, JWT_DEV } = require('../utils/const');
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -15,7 +16,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_PROD : 'JWT_DEV',
+        NODE_ENV === 'production' ? JWT_PROD : JWT_DEV,
         { expiresIn: '7d' },
       );
       res.cookie('token', token, {
@@ -26,8 +27,12 @@ module.exports.login = (req, res, next) => {
         .send({ message: 'Авторизация прошла успешно' });
     })
     .catch(() => {
-      next(new BadAuthError('Неправильные почта или пароль'));
+      next(new BadAuthError(ERRORS_MESSAGE.badAuth.messageUncorrectedData));
     });
+};
+
+module.exports.logout = (req, res) => {
+  res.clearCookie('token').send();
 };
 
 module.exports.register = (req, res, next) => {
@@ -41,10 +46,10 @@ module.exports.register = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+        return next(new BadRequestError(ERRORS_MESSAGE.badRequest.messageUncorrectedData));
       }
       if (err.code === 11000) {
-        return next(new ExistEmailError('Передан уже зарегистрированный email.'));
+        return next(new ExistEmailError(ERRORS_MESSAGE.existConflict.messageDefault));
       }
       return next(err);
     });
@@ -53,7 +58,7 @@ module.exports.register = (req, res, next) => {
 module.exports.getUserInfo = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
-    .orFail(new NotFoundError(`Пользователь с id ${userId} не найден`))
+    .orFail(new NotFoundError(ERRORS_MESSAGE.notFound.messageSearchUser))
     .then((user) => res.send({ data: user }))
     .catch(next);
 };
@@ -68,14 +73,17 @@ module.exports.updateUserInfo = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new NotFoundError(`Пользователь с id ${req.user._id} не найден`))
+    .orFail(new NotFoundError(ERRORS_MESSAGE.notFound.messageSearchUser))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
+        return next(new BadRequestError(ERRORS_MESSAGE.badRequest.messageUncorrectedData));
       }
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Пользователь не найден'));
+        return next(new BadRequestError(ERRORS_MESSAGE.notFound.messageSearchUser));
+      }
+      if (err.code === 11000) {
+        return next(new ExistEmailError(ERRORS_MESSAGE.existConflict.messageDefault));
       }
       return next(err);
     });

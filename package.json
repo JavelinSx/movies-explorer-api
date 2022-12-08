@@ -14,7 +14,7 @@
     "validator": "^13.7.0",
     "winston": "^3.8.2"
   },
-  "name": "",
+  "name": "movies-explorer-api",
   "description": "",
   "version": "1.0.0",
   "main": "app.js",

@@ -5,6 +5,7 @@ const movieRouter = require('./movies');
 const {
   login,
   register,
+  logout,
 } = require('../controllers/users');
 const { auth } = require('../middlewares/auth');
 const { userLoginValidation, userRegisterValidation } = require('../utils/userSchemaValidation');
@@ -17,11 +18,7 @@ router.use(auth);
 
 router.use('/users', userRouter);
 router.use('/movies', movieRouter);
-router.get('/signout', (req, res) => {
-  res.clearCookie('token').send({
-    message: 'Вы вышли из аккаунта',
-  });
-});
+router.get('/signout', logout);
 router.use('*', (req, res, next) => {
   next(new NotFoundError('Запрашиваемый ресурс не найден'));
 });

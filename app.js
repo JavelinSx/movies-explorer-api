@@ -10,14 +10,15 @@ const handlerErrors = require('./middlewares/errors');
 const router = require('./routes/index');
 const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { DB_PATH_DEV } = require('./utils/const');
 
-const { PORT = 3000 } = process.env;
-
+const { PORT = 3000, DB_PATH_PROD = DB_PATH_DEV, NODE_ENV } = process.env;
+const pathDB = NODE_ENV === 'protuction' ? DB_PATH_PROD : DB_PATH_DEV;
 const app = express();
 
 async function connected() {
   try {
-    mongoose.connect('mongodb://localhost:27017/moviesdb', {
+    mongoose.connect(pathDB, {
       useNewUrlParser: true,
     });
   } catch (err) {

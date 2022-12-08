@@ -1,5 +1,5 @@
 const { Joi } = require('celebrate');
-// const { LINK_REGEX } = require('./const');
+const { LINK_REGEX } = require('./const');
 
 const createMovieValidation = {
   body: Joi.object().keys({
@@ -8,11 +8,11 @@ const createMovieValidation = {
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required(),
-    trailerLink: Joi.string().required(),
-    thumbnail: Joi.string().required(),
-    owner: Joi.string().required(),
-    movieId: Joi.string().required().length(24).hex(),
+    image: Joi.string().required().pattern(LINK_REGEX)
+      .message('hello'),
+    trailerLink: Joi.string().required().pattern(LINK_REGEX),
+    thumbnail: Joi.string().required().pattern(LINK_REGEX),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -20,7 +20,7 @@ const createMovieValidation = {
 
 const movieIdValidation = {
   params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex(),
+    movieId: Joi.string().required().length(24).hex(),
   }),
 };
 
