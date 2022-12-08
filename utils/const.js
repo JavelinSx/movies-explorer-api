@@ -5,8 +5,6 @@ const DB_PATH_DEV = 'mongodb://localhost:27017/moviesdb-dev';
 const ERRORS_MESSAGE = {
   badRequest: {
     messageUncorrectedData: 'Переданы некорректные данные',
-    messageNotIdMovie: 'Передан некорректный id фильма',
-    messageNotIdUser: 'Передан некорректный id пользователя',
   },
   badAuth: {
     messageNeedAuth: 'Необходима авторизация',
