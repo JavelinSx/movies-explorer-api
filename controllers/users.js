@@ -36,16 +36,17 @@ module.exports.logout = (req, res) => {
 };
 
 module.exports.register = (req, res, next) => {
-  const { email, name, password } = req.body;
+  const { name, email, password } = req.body;
   return bcrypt.hash(password, 10)
-    .then((hash) => User.create({ email, name, password: hash }))
+    .then((hash) => User.create({ name, email, password: hash }))
     .then((user) => {
       res.send({
-        email: user.email, name: user.name, _id: user._id,
+        name: user.name, email: user.email, _id: user._id,
       });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
+        console.log('hekllo');
         return next(new BadRequestError(ERRORS_MESSAGE.badRequest.messageUncorrectedData));
       }
       if (err.code === 11000) {

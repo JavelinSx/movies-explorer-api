@@ -4,6 +4,12 @@ const validator = require('validator');
 const BadAuthError = require('../errors/bad_auth');
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minLength: 2,
+    maxLength: 30,
+  },
   email: {
     type: String,
     required: true,
@@ -14,12 +20,6 @@ const userSchema = new mongoose.Schema({
       }
       return false;
     },
-  },
-  name: {
-    type: String,
-    required: true,
-    minLength: 2,
-    maxLength: 30,
   },
   password: {
     type: String,
