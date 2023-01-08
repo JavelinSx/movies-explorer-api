@@ -24,7 +24,10 @@ module.exports.login = (req, res, next) => {
         sameSite: 'none',
         secure: true,
       })
-        .send({ message: 'Авторизация прошла успешно' });
+        .send({
+          name: user.name,
+          email: user.email,
+        });
     })
     .catch(() => {
       next(new BadAuthError(ERRORS_MESSAGE.badAuth.messageUncorrectedData));
@@ -32,7 +35,7 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie('token').send();
+  res.clearCookie('token').send({ message: 'Вы вышли из аккаунта' });
 };
 
 module.exports.register = (req, res, next) => {
@@ -60,7 +63,10 @@ module.exports.getUserInfo = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail(new NotFoundError(ERRORS_MESSAGE.notFound.messageSearchUser))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({
+      name: user.name,
+      email: user.email,
+    }))
     .catch(next);
 };
 

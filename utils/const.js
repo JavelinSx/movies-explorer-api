@@ -8,7 +8,7 @@ const ERRORS_MESSAGE = {
   },
   badAuth: {
     messageNeedAuth: 'Необходима авторизация',
-    messageUncorrectedData: 'Переданные данные некорректные login или email',
+    messageUncorrectedData: 'Переданные некорректные данные email или password',
   },
   notFound: {
     messageDefault: 'Запрашиваемый ресурс не найден',
