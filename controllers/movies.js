@@ -5,33 +5,7 @@ const ForbiddenError = require('../errors/forbidden_error');
 const { ERRORS_MESSAGE } = require('../utils/const');
 
 module.exports.createMovie = (req, res, next) => {
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-  } = req.body;
-  Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    owner: req.user._id,
-    movieId,
-    nameRU,
-    nameEN,
-  })
+  Movie.create({ ...req.body, owner: req.user._id })
     .then((movie) => {
       res.send(movie);
     })
@@ -51,8 +25,7 @@ module.exports.getMoviesSavedByUser = (req, res, next) => {
 
 module.exports.deleteSavedMovie = (req, res, next) => {
   const { movieId } = req.params;
-  console.log(req);
-  Movie.findOne({ _id: movieId })
+  Movie.findById(movieId)
     .orFail(new NotFoundError(ERRORS_MESSAGE.notFound.messageSearchMovie))
     .then((movie) => {
       if (movie.owner.toString() === req.user._id) {

@@ -8,8 +8,7 @@ const createMovieValidation = {
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(LINK_REGEX)
-      .message('hello'),
+    image: Joi.string().required().pattern(LINK_REGEX),
     trailerLink: Joi.string().required().pattern(LINK_REGEX),
     thumbnail: Joi.string().required().pattern(LINK_REGEX),
     movieId: Joi.number().required(),
@@ -20,7 +19,7 @@ const createMovieValidation = {
 
 const movieIdValidation = {
   params: Joi.object().keys({
-    movieId: Joi.string().required().length(24).hex(),
+    movieId: Joi.string().length(24).hex(),
   }),
 };
 
