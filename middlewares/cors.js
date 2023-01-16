@@ -1,10 +1,11 @@
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const allowedCors = [
-  'http://javelin.nomoredomains.icu',
-  'https://javelin.nomoredomains.icu',
-  'http://api.javelin.nomoredomains.icu',
-  'https://api.javelin.nomoredomains.icu',
+  'http://localhost:3001',
+  'http://javelin-movie.nomoredomains.club',
+  'https://javelin-movie.nomoredomains.club',
+  'http://api-javelin-movie.nomoredomains.club',
+  'https://api-javelin-movie.nomoredomains.club',
   'https://api.nomoreparties.co/beatfilm-movies',
 ];
 
