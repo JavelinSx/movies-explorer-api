@@ -13,7 +13,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { DB_PATH_DEV } = require('./utils/const');
 
 const { PORT = 3000, DB_PATH_PROD = DB_PATH_DEV, NODE_ENV } = process.env;
-const pathDB = NODE_ENV === 'protuction' ? DB_PATH_PROD : DB_PATH_DEV;
+const pathDB = NODE_ENV === 'production' ? DB_PATH_PROD : DB_PATH_DEV;
 const app = express();
 
 async function connected() {
